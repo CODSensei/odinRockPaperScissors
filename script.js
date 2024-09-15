@@ -1,28 +1,11 @@
+//score
 let humanScore = 0;
 let computerScore = 0;
 
-//generate a random number from 0 to 2
-//then with that get rock paper and scissors
 const getComputerChoice = () => {
   const choices = ["rock", "paper", "scissors"];
   choiceIndex = Math.floor(Math.random() * 3);
   return choices[choiceIndex];
-};
-
-//get the prompt and check if it is valid or not
-const getHumanChoice = () => {
-  const a = prompt("Enter your choice (Rock , Paper , Scissors) ");
-  if (
-    a !== "Rock" &&
-    a !== "rock" &&
-    a !== "Paper" &&
-    a !== "paper" &&
-    a !== "Scissors" &&
-    a !== "scissors"
-  ) {
-    alert("Invalid Prompt");
-  }
-  return a;
 };
 
 //takes choices and checks who win or loose or it is a draw
@@ -50,17 +33,78 @@ const playRound = (humanChoice, computerChoice) => {
   }
 };
 
-//gets choices and play round 5 times
-const playGame = () => {
-  for (i = 0; i < 5; i++) {
-    const humanChoice = getHumanChoice().toLowerCase();
-    console.log(`Your number ${i + 1} choice is`, humanChoice);
-    const computerChoice = getComputerChoice().toLowerCase();
-    console.log(`Computer number ${i + 1} choice is`, computerChoice);
-    playRound(humanChoice, computerChoice);
-    console.log(`Your Score is ${humanScore}`);
-    console.log(`Computer Score is ${computerScore}`);
+//game ui logic
+const gameProcess = (choiceNumber) => {
+  const choices = ["rock", "paper", "scissors"];
+  const humanChoice = choices[choiceNumber].toLowerCase();
+  const computerChoice = getComputerChoice().toLowerCase();
+  console.log(`Your Choice is`, humanChoice);
+  console.log(`Computer Choice is`, computerChoice);
+  playRound(humanChoice, computerChoice);
+  console.log(`Your Score is ${humanScore}`);
+  console.log(`Computer Score is ${computerScore}`);
+  scoreBoard.textContent = `Human Score = ${humanScore} Computer Score = ${computerScore}`;
+  winner();
+};
+
+//Who wins
+const winner = () => {
+  if (humanScore == 5) {
+    announcement.textContent = "You Win!";
+    scoreBoard.appendChild(announcement);
+    humanChoiceButton.forEach((item) => {
+      console.log(item);
+      item.disabled = true;
+    });
+  } else if (computerScore == 5) {
+    announcement.textContent = "You Lose!";
+    scoreBoard.appendChild(announcement);
+    humanChoiceButton.forEach((item) => {
+      console.log(item);
+      item.disabled = true;
+    });
   }
 };
 
-playGame();
+//Three Buttons
+const container = document.querySelector("body");
+const rockButton = document.createElement("button");
+rockButton.setAttribute("id", "rock");
+rockButton.classList.add("humanChoices");
+rockButton.textContent = "ROCK";
+rockButton.addEventListener("click", () => {
+  gameProcess(0);
+});
+container.appendChild(rockButton);
+
+const paperButton = document.createElement("button");
+paperButton.setAttribute("id", "paper");
+paperButton.classList.add("humanChoices");
+paperButton.textContent = "PAPER";
+paperButton.addEventListener("click", () => {
+  gameProcess(1);
+});
+container.appendChild(paperButton);
+
+const stoneButton = document.createElement("button");
+stoneButton.setAttribute("id", "scissors");
+stoneButton.classList.add("humanChoices");
+stoneButton.textContent = "SCISSORS";
+stoneButton.addEventListener("click", () => {
+  gameProcess(2);
+});
+container.appendChild(stoneButton);
+
+//all three buttons nodelist
+const humanChoiceButton = document.querySelectorAll("button");
+// console.log(humanChoiceButton);
+
+//scoreboard 
+// scoreBoard.style.cssText = "background: red; height: 100px; width: 100px;"
+const scoreBoard = document.createElement("div");
+scoreBoard.setAttribute("class", "scoreboard");
+container.appendChild(scoreBoard);
+scoreBoard.textContent = `Human Score = ${humanScore} Computer Score = ${computerScore}`;
+
+//winner announcement
+const announcement = document.createElement("h1");
